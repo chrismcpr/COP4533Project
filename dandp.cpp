@@ -1,7 +1,21 @@
 #include <iostream>
 #include <vector>
-
+#include <cstdlib>
+#include <chrono>
 using namespace std;
+
+
+vector<int> listGenerator(int size, int rangeMin = 0, int rangeMax = 100){
+    vector<int> list;
+    list.reserve(size);
+
+    for (int i = 0; i < size; i++){
+        int num = rangeMin + (rand() % (rangeMax - rangeMin + 1));
+        list.push_back(num);
+    }
+
+    return list;
+}
 
 vector<int> Merge(vector<int> leftArray, vector<int> rightArray) {
 
@@ -64,15 +78,22 @@ vector<int> MergeSort(vector<int> values) {
 
 int main () {
 
-    vector<int> sort = {23, 8, 33, 90, 12, 4, 27, 9, 14};
+    vector<int> sort = listGenerator(1000, 20000, 60000);
+
+    auto start = chrono::high_resolution_clock::now();
 
     vector<int> sorted = MergeSort(sort);
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
 
     for (int i = 0; i < sort.size(); i++) {
 
         cout << sorted[i] << " ";
 
     }
+
+    cout << "\n" << "Time: " << duration.count() << " seconds" << endl;
 
 
     return 0;
