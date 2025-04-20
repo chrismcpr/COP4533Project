@@ -5,6 +5,28 @@
 using namespace std;
 
 
+// Use -lpsapi in terminal when creating file Example: "g++ file.cpp -o name -lpsapi"
+#ifdef _WIN32
+#include <windows.h>
+#include <psapi.h>
+
+void peakMemoryUsage(){
+    PROCESS_MEMORY_COUNTERS mem;
+    GetProcessMemoryInfo(GetCurrentProcess(), &mem, sizeof(mem));
+    SIZE_T peak = mem.PeakWorkingSetSize;
+    cout << "Peak Memory Usage: " << peak / 1024 << "KB" << endl;
+}
+#else
+// for linux and macOS users
+#include <sys/resource.h>
+
+void peakMemoryUsage(){
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    cout << "Peak Memory Usage: " << usage.ru_maxrss / 1024 << "KB" << endl;
+}
+#endif
+
 vector<int> listGenerator(int size, int rangeMin = 0, int rangeMax = 100){
     vector<int> list;
     list.reserve(size);
@@ -78,7 +100,7 @@ vector<int> MergeSort(vector<int> values) {
 
 int main () {
 
-    vector<int> sort = listGenerator(1000, 20000, 60000);
+    vector<int> sort = listGenerator(100, 20000, 200000);
 
     auto start = chrono::high_resolution_clock::now();
 
@@ -94,6 +116,8 @@ int main () {
     }
 
     cout << "\n" << "Time: " << duration.count() << " seconds" << endl;
+
+    peakMemoryUsage();
 
 
     return 0;
