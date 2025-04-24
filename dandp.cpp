@@ -99,8 +99,17 @@ vector<int> MergeSort(vector<int> values) {
 }
 
 int main () {
-
-    vector<int> sort = listGenerator(100, 20000, 200000);
+    int size;
+    int minRange;
+    int maxRange;
+    cout << "Enter size of list: ";
+    cin >> size;
+    cout << "Enter smallest element in list";
+    cin >> minRange;
+    cout << "Enter Largest element in list";
+    cin >> maxRange;
+    
+    vector<int> sort = listGenerator(size, minRange, maxRange);
 
     auto start = chrono::high_resolution_clock::now();
 
